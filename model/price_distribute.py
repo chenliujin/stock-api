@@ -1,4 +1,7 @@
 from conf import cursor 
+import requests
+import json
+
 
 class price_distribute:
 
@@ -7,26 +10,50 @@ class price_distribute:
     where = []
     where_value = []
 
+    where.append('customer_id = 1')
+
     if params['stock_code'] :
-      where.append('stock_code = %s')
-      where_value.append(params['stock_code'])
+      where.append("stock_code = '" + params['stock_code'] + "'")
 
     if params['status'] :
-      where.append('status = %s')
-      where_value.append(params['status'])
+      where.append('status = ' + params['status'])
 
     sql="SELECT price, SUM(if(deal_type='B', quantity, null)) as B, sum(if(deal_type='S', quantity, null)) as S FROM deal WHERE " + ' AND '.join(where) + " GROUP BY price ORDER BY price";
-    cursor.execute(sql, (where_value))
-    results = cursor.fetchall()
 
-    data = []
+    url = 'http://www.chenliujin.com/kylin/api/query'
+
+    auth=('ADMIN', 'KYLIN')
+
+    headers = {
+      "Content-Type": "application/json;charset=UTF-8"
+    }
+    
+    data = {
+      "sql": "SELECT customer_id, stock_code, price, deal_type, SUM(quantity) AS volume FROM deal WHERE " + ' AND '.join(where) + " GROUP BY customer_id, stock_code, price, deal_type ORDER BY price ASC",
+      "offset": 0,
+      "limit": 50000,
+      "acceptPartial": False,
+      "project": "stock",
+    }
+    
+    r = requests.post(url, headers=headers, auth=auth, data=json.dumps(data))
+
+    if r.status_code != 200 :
+      return []
+    
+    results = r.json()['results']
+
+    data = {}
 
     for result in results: 
-      row = {}
-      row["price"] = str(result[0])
-      row["buy"] = str(result[1])
-      row["sale"] = str(result[2])
+      if result[2] in data:
+        data[result[2]][result[3]] = result[4]
+      else:
+        data[result[2]] = {'price': result[2], result[3]: result[4]}
 
-      data.append(row)
+    data2 = []
 
-    return data
+    for key in data:
+      data2.append(data[key])
+
+    return data2
