@@ -12,8 +12,8 @@ class priceDistribute(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('stock_code')
-    parser.add_argument('starttime')
-    parser.add_argument('endtime')
+    parser.add_argument('start_time')
+    parser.add_argument('end_time')
     parser.add_argument('status')
 
     params =  parser.parse_args()
