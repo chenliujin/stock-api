@@ -45,6 +45,7 @@ class price_distribute:
     r = requests.post(url, headers=headers, auth=auth, data=json.dumps(data))
 
     if r.status_code != 200 :
+      print('kylin error')
       return []
     
     results = r.json()['results']
