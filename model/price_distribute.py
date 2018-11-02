@@ -24,8 +24,6 @@ class price_distribute:
     if params['end_time'] :
       where.append("deal_date <= '" + params['end_time'] + "'")
 
-    sql="SELECT price, SUM(if(deal_type='B', quantity, null)) as B, sum(if(deal_type='S', quantity, null)) as S FROM deal WHERE " + ' AND '.join(where) + " GROUP BY price ORDER BY price";
-
     url = 'http://www.chenliujin.com/kylin/api/query'
 
     auth=('ADMIN', 'KYLIN')
@@ -35,7 +33,7 @@ class price_distribute:
     }
     
     data = {
-      "sql": "SELECT customer_id, stock_code, price, deal_type, SUM(quantity) AS volume FROM deal WHERE " + ' AND '.join(where) + " GROUP BY customer_id, stock_code, price, deal_type ORDER BY price ASC",
+      "sql": "SELECT customer_id, stock_code, price, deal_type, SUM(volume) AS volume FROM deal WHERE " + ' AND '.join(where) + " GROUP BY customer_id, stock_code, price, deal_type ORDER BY price ASC",
       "offset": 0,
       "limit": 50000,
       "acceptPartial": False,

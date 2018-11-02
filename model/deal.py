@@ -10,14 +10,14 @@ class deal:
   @staticmethod
   def post(param):
 
-    sql = "INSERT INTO deal(deal_date, stock_code, deal_type, price, quantity, total, stamp_tax, poundage, transfer_fee, sundry_fees, amount, customer_id, status) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    sql = "INSERT INTO deal(deal_date, stock_code, deal_type, price, volume, total, stamp_tax, poundage, transfer_fee, sundry_fees, amount, customer_id, status) VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
 
     fields = ( 
         param['deal_date'],
         param['stock_code'],
         param['deal_type'],
         param['price'],
-        param['quantity'],
+        param['volume'],
         param['total'],
         param['stamp_tax'],
         param['poundage'],

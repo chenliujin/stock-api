@@ -3,9 +3,10 @@ import pymysql
 mysql = {}
 
 mysql['host'] = "172.20.10.6"
-mysql['port'] = 3306
-mysql['user'] = "appuser"
-mysql['passwd'] = "@Chenliujin8"
+mysql['port'] = 3307
+mysql['user'] = "root"
+mysql['passwd'] = "chenliujin"
+#mysql['passwd'] = "@Chenliujin8"
 mysql['db'] = "stock"
 
 conn = pymysql.connect(

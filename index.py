@@ -32,7 +32,7 @@ class Deal(Resource):
     parser.add_argument('stock_code')
     parser.add_argument('deal_type')
     parser.add_argument('price')
-    parser.add_argument('quantity')
+    parser.add_argument('volume')
     parser.add_argument('total')
     parser.add_argument('stamp_tax')
     parser.add_argument('poundage')

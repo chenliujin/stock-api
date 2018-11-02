@@ -30,7 +30,7 @@ def import_deal(file):
         'stock_code': check_stock_code(row[14]),
         'deal_type': deal_type,
         'price': row[5],
-        'quantity': row[4],
+        'volume': row[4],
         'total': row[6],
         'stamp_tax': row[8],
         'poundage': row[7],
@@ -61,7 +61,8 @@ files = [
   #"/root/s-api/tests/20180717-20180814.csv"
   #"/root/s-api/tests/20180815-20180821.csv"
   #"/root/s-api/tests/20180822-20180910.csv"
-  "/root/s-api/tests/20180911-20180924.csv"
+  #"/root/s-api/tests/20180911-20180924.csv"
+  "/root/stock-api/tests/20180925-20181101.csv"
 ]
 
 for file in files:
