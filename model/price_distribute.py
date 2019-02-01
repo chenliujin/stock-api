@@ -1,7 +1,13 @@
 from conf import cursor 
+from decimal import *
 import requests
 import json
+import logging
 
+logging.basicConfig(
+  level=logging.INFO,
+  filename='/var/log/stock-api.log'
+)
 
 class price_distribute:
 
@@ -39,11 +45,11 @@ class price_distribute:
       "acceptPartial": False,
       "project": "stock",
     }
-    
+
     r = requests.post(url, headers=headers, auth=auth, data=json.dumps(data))
 
     if r.status_code != 200 :
-      print('kylin error')
+      logging.critical('kylin error')
       return []
     
     results = r.json()['results']
@@ -60,5 +66,7 @@ class price_distribute:
 
     for key in data:
       data2.append(data[key])
+
+    data2 = sorted(data2, key=lambda data2:Decimal(data2['price']))
 
     return data2
