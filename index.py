@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 #!/usr/bin/env python
 
 from flask import Flask, jsonify
@@ -53,6 +54,6 @@ api.add_resource(priceDistribute, '/v1/stock/price_distribute/')
 api.add_resource(Deal, '/v1/stock/deal/')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=80)
+    app.run(debug=True, host='0.0.0.0', port=8081)
 
 
