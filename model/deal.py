@@ -28,6 +28,7 @@ class deal:
         param['status']
     )
 
+    conn.ping(reconnect=True)
     ret = cursor.execute(sql, fields)
 
     conn.commit()
