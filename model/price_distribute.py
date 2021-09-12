@@ -1,4 +1,4 @@
-from conf import cursor 
+from conf import conn, cursor 
 from decimal import *
 import requests
 import json
@@ -30,37 +30,26 @@ class price_distribute:
     if params['end_time'] :
       where.append("deal_date <= '" + params['end_time'] + "'")
 
-    url = 'http://www.chenliujin.com/kylin/api/query'
+    sql = "SELECT price, deal_type, sum(volume) FROM deal WHERE " + " AND ".join(where) + " GROUP BY price, deal_type"
 
-    auth=('ADMIN', 'KYLIN')
+    conn.ping(reconnect=True)
 
-    headers = {
-      "Content-Type": "application/json;charset=UTF-8"
-    }
+    ret = cursor.execute(sql)
+
+    results = cursor.fetchall()
+
+    #if r.status_code != 200 :
+      #logging.critical('kylin error')
+      #return []
     
-    data = {
-      "sql": "SELECT customer_id, stock_code, price, deal_type, SUM(volume) AS volume FROM deal WHERE " + ' AND '.join(where) + " GROUP BY customer_id, stock_code, price, deal_type ORDER BY price ASC",
-      "offset": 0,
-      "limit": 50000,
-      "acceptPartial": False,
-      "project": "stock",
-    }
-
-    r = requests.post(url, headers=headers, auth=auth, data=json.dumps(data))
-
-    if r.status_code != 200 :
-      logging.critical('kylin error')
-      return []
-    
-    results = r.json()['results']
 
     data = {}
 
     for result in results: 
-      if result[2] in data:
-        data[result[2]][result[3]] = result[4]
+      if result[0] in data:
+        data[result[0]][result[1]] = result[2]
       else:
-        data[result[2]] = {'price': result[2], result[3]: result[4]}
+        data[result[0]] = {'price': result[0], result[1]: result[2]}
 
     data2 = []
 
